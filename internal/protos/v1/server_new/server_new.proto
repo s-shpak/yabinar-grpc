@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "webinar-service/internal/protos/server_new";
+
+package webinar.protobuf;
+
+service Dummy {
+    rpc SayHello (HelloRequest) returns (HelloResponse) {}
+}
+  
+
+message HelloRequest {
+    string locale = 1;
+    string msg = 2;
+}
+
+message HelloResponse {
+    string msg = 1;
+}

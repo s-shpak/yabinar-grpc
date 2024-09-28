@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	pb "webinar-service/internal/protos/v1/server_old"
+	pb "webinar-service/internal/protos/v1/server_new"
 )
 
 type Server struct {

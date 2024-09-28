@@ -5,7 +5,7 @@ import (
 	"net"
 	server "webinar-service/internal/api/v1"
 
-	pb "webinar-service/internal/protos/v1/server_old"
+	pb "webinar-service/internal/protos/v1/server_new"
 
 	"google.golang.org/grpc"
 )
