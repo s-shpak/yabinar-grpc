@@ -3,6 +3,7 @@ package v1
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	pb "webinar-service/internal/protos/v1/server_new"
 )
@@ -16,7 +17,26 @@ func NewServer() *Server {
 }
 
 func (srv *Server) SayHello(ctx context.Context, req *pb.HelloRequest) (*pb.HelloResponse, error) {
+	msg := transformMessage(req.Msg, req.Transformation)
 	return &pb.HelloResponse{
-		Msg: fmt.Sprintf("got: \"%s\"", req.Msg),
+		Msg: fmt.Sprintf("got: \"%s\"", msg),
 	}, nil
+}
+
+func transformMessage(msg string, tf pb.HelloTransformation) string {
+	switch tf {
+	case pb.HelloTransformation_HELLO_TRANSFOMRATION_TO_UPPER:
+		return strings.ToUpper(msg)
+	case pb.HelloTransformation_HELLO_TRANSFOMRATION_REVERSE:
+		return reverse(msg)
+	}
+	return msg
+}
+
+func reverse(s string) string {
+	runes := []rune(s)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
 }

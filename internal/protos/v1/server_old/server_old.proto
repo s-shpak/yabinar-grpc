@@ -10,7 +10,9 @@ service Dummy {
   
 
 message HelloRequest {
-    string msg = 1;
+    reserved 1;
+    string msg = 2;
+    string locale = 3;
 }
 
 message HelloResponse {
