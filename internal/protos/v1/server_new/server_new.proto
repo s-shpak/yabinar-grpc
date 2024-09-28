@@ -13,7 +13,7 @@ message HelloRequest {
     reserved 1;
     string msg = 2;
     string locale = 3;
-    HelloTransformation transformation = 4;
+    optional HelloTransformation transformation = 4;
 }
 
 message HelloResponse {
@@ -21,6 +21,7 @@ message HelloResponse {
 }
 
 enum HelloTransformation {
-    HELLO_TRANSFOMRATION_TO_UPPER = 0;
-    HELLO_TRANSFOMRATION_REVERSE = 1;
+    HELLO_TRANSFORMATION_UNSPECIFIED = 0;
+    HELLO_TRANSFOMRATION_TO_UPPER = 1;
+    HELLO_TRANSFOMRATION_REVERSE = 2;
 }

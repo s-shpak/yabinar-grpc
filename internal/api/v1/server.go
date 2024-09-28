@@ -17,7 +17,7 @@ func NewServer() *Server {
 }
 
 func (srv *Server) SayHello(ctx context.Context, req *pb.HelloRequest) (*pb.HelloResponse, error) {
-	msg := transformMessage(req.Msg, req.Transformation)
+	msg := transformMessage(req.Msg, req.GetTransformation())
 	return &pb.HelloResponse{
 		Msg: fmt.Sprintf("got: \"%s\"", msg),
 	}, nil
