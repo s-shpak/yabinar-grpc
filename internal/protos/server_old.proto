@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "webinar-service/internal/protos/server_old";
+
+package webinar.protobuf;
+
+service Greeter {
+    rpc SayHello (HelloRequest) returns (HelloResponse) {}
+}
+  
+
+message HelloRequest {
+    string msg = 1;
+}
+
+message HelloResponse {
+    string msg = 2;
+}
+
