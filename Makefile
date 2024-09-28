@@ -2,12 +2,19 @@
 gen-proto:
 	protoc \
 		--go_out=. \
-		--go_opt=paths=import \
+		--go_opt=paths=source_relative \
 		--go-grpc_out=. \
 		--go-grpc_opt=paths=source_relative \
-		internal/protos/*.proto
+		internal/protos/v1/server_old/*.proto
+
+.PHONY: build
+build: build-server-client
+
+.PHONY: build-server-client
+build-server-client: gen-proto
+	go build -o cmd/client/client ./cmd/client
+	go build -o cmd/server/server ./cmd/server
 
 .PHONY: clean-gen-proto
 clean-gen-proto:
 	find internal/protos -type f ! -name "*.proto" -delete
-	find internal/protos -mindepth 1 -maxdepth 1 -type d -exec rm -R {} +

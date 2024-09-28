@@ -1,1 +1,4 @@
 **/*.pb.go
+
+cmd/server/server
+cmd/client/client

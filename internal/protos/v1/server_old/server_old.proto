@@ -4,7 +4,7 @@ option go_package = "webinar-service/internal/protos/server_old";
 
 package webinar.protobuf;
 
-service Greeter {
+service Dummy {
     rpc SayHello (HelloRequest) returns (HelloResponse) {}
 }
   
@@ -14,6 +14,5 @@ message HelloRequest {
 }
 
 message HelloResponse {
-    string msg = 2;
+    string msg = 1;
 }
-
