@@ -43,7 +43,7 @@ func SayHello(ctx context.Context) error {
 	}
 
 	resp, err := client.SayHello(ctx, &pb.HelloRequest{
-		Msg: "hello from client",
+		Msg: 42,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to send a message to the server: %v", err)
