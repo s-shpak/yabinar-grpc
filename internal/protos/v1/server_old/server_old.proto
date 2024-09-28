@@ -11,8 +11,9 @@ service Dummy {
 
 message HelloRequest {
     reserved 1;
-    int32 msg = 2;
+    repeated string msg = 2;
     string locale = 3;
+    repeated int64 clientID = 5;
 }
 
 message HelloResponse {

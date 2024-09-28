@@ -14,6 +14,7 @@ message HelloRequest {
     string msg = 2;
     string locale = 3;
     optional HelloTransformation transformation = 4;
+    int64 clientID = 5;
 }
 
 message HelloResponse {
