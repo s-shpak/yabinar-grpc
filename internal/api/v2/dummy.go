@@ -21,7 +21,7 @@ func (srv *Server) SayHello(ctx context.Context, req *pbModel.HelloRequest) (*pb
 	msg := transformMessage(req.Msg, req.GetTransformations())
 	respMsg := fmt.Sprintf("got: \"%s\"", msg)
 	if req.ClientId != nil {
-		respMsg += fmt.Sprintf(", client ID: %d", req.ClientId.Id)
+		respMsg += fmt.Sprintf(", client ID: %s", req.ClientId.Id)
 	}
 	return &pbModel.HelloResponse{
 		Msg: &pbModel.HelloMessage{

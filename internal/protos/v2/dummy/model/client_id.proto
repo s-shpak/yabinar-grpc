@@ -5,5 +5,5 @@ option go_package = "webinar-service/internal/protos/v2/dummy/model";
 package practicum.go.grpc_webinar.v2.dummy.model;
 
 message ClientID {
-    int64 id = 1;
+    string id = 1;
 }
