@@ -4,9 +4,12 @@ option go_package = "webinar-service/internal/protos/v2/dummy";
 
 package practicum.go.grpc_webinar.v2.dummy;
 
+import "model/get_something_from_db_request.proto";
+import "model/get_something_from_db_response.proto";
 import "model/hello_request.proto";
 import "model/hello_response.proto";
 
 service Dummy {
     rpc SayHello (model.HelloRequest) returns (model.HelloResponse) {}
+    rpc GetSomethingFromDB (model.GetSomethingFromDBRequest) returns (model.GetSomethingFromDBResponse) {}
 }

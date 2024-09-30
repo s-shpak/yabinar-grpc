@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "webinar-service/internal/protos/v2/dummy/model";
+
+package practicum.go.grpc_webinar.v2.dummy.model;
+
+import "google/protobuf/timestamp.proto";
+
+message ContinuationToken {
+    bytes token = 1;
+}
+
+message ContinuationTokenInternals {
+    google.protobuf.Timestamp ts = 1;
+}

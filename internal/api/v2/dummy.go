@@ -7,6 +7,9 @@ import (
 
 	pb "webinar-service/internal/protos/v2/dummy"
 	pbModel "webinar-service/internal/protos/v2/dummy/model"
+
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type Server struct {
@@ -53,4 +56,29 @@ func reverse(s string) string {
 		runes[i], runes[j] = runes[j], runes[i]
 	}
 	return string(runes)
+}
+
+func (srv *Server) GetSomethingFromDB(ctx context.Context, req *pbModel.GetSomethingFromDBRequest) (*pbModel.GetSomethingFromDBResponse, error) {
+	var ct *pbModel.ContinuationTokenInternals
+	if req.Ct != nil {
+		m := &pbModel.ContinuationTokenInternals{}
+		proto.Unmarshal(req.Ct.Token, m)
+		ct = m
+	}
+
+	// business logic goes here
+	// ...
+
+	ct = &pbModel.ContinuationTokenInternals{
+		Ts: timestamppb.Now(),
+	}
+	ctMarshalled, err := proto.Marshal(ct)
+	if err != nil {
+		panic(err)
+	}
+	return &pbModel.GetSomethingFromDBResponse{
+		Ct: &pbModel.ContinuationToken{
+			Token: ctMarshalled,
+		},
+	}, nil
 }
