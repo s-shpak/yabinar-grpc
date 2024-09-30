@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option go_package = "webinar-service/internal/protos/v2/dummy/model";
+
+package practicum.go.grpc_webinar.v2.dummy.model;
+
+message HelloResponse {
+    string msg = 1;
+}
