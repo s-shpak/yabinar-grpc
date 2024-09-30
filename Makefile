@@ -20,8 +20,8 @@ gen-v1:
 .PHONY: gen-v2
 gen-v2:
 	protoc \
-		--proto_path=internal/protos/v2/dummy/model \
-		--go_out=internal/protos/v2/dummy/model \
+		--proto_path=internal/protos/v2/dummy \
+		--go_out=internal/protos/v2/dummy \
 		--go_opt=paths=source_relative \
 		internal/protos/v2/dummy/model/*.proto
 

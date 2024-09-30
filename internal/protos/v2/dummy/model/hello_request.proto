@@ -4,7 +4,7 @@ option go_package = "webinar-service/internal/protos/v2/dummy/model";
 
 package practicum.go.grpc_webinar.v2.dummy.model;
 
-import "hello_transformation.proto";
+import "model/hello_transformation.proto";
 
 message HelloRequest {
     reserved 1;
