@@ -68,6 +68,18 @@ grpcurl -plaintext localhost:8081 describe practicum.go.grpc_webinar.v2.dummy.Du
 
 Исправим проблему и убедимся, что теперь Postman может использовать рефлексию.
 
+Также для дебаггинга могут пригодиться переменные окружения `GRPC_GO_LOG_SEVERITY_LEVEL` и `GRPC_GO_LOG_VERBOSITY_LEVEL`:
+
+```bash
+GRPC_GO_LOG_SEVERITY_LEVEL=info GRPC_GO_LOG_VERBOSITY_LEVEL=2 ./cmd/server/server
+```
+
+## Api best practices
+
+См. рекомендации здесь: https://protobuf.dev/programming-guides/api/
+
+
+
 
 ## Protobuf
 

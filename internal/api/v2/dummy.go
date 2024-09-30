@@ -19,19 +19,29 @@ func NewServer() *Server {
 
 func (srv *Server) SayHello(ctx context.Context, req *pbModel.HelloRequest) (*pbModel.HelloResponse, error) {
 	msg := transformMessage(req.Msg, req.GetTransformation())
+	respMsg := fmt.Sprintf("got: \"%s\"", msg)
+	if req.ClientId != nil {
+		respMsg += fmt.Sprintf(", client ID: %d", req.ClientId.Id)
+	}
 	return &pbModel.HelloResponse{
-		Msg: fmt.Sprintf("got: \"%s\", client ID: %d", msg, req.ClientID),
+		Msg: &pbModel.HelloMessage{
+			Msg: respMsg,
+		},
 	}, nil
 }
 
-func transformMessage(msg string, tf pbModel.HelloTransformation) string {
+func transformMessage(msg *pbModel.HelloMessage, tf pbModel.HelloTransformation) string {
+	if msg == nil {
+		return ""
+	}
+	innerMsg := msg.Msg
 	switch tf {
 	case pbModel.HelloTransformation_HELLO_TRANSFOMRATION_TO_UPPER:
-		return strings.ToUpper(msg)
+		return strings.ToUpper(innerMsg)
 	case pbModel.HelloTransformation_HELLO_TRANSFOMRATION_REVERSE:
-		return reverse(msg)
+		return reverse(innerMsg)
 	}
-	return msg
+	return innerMsg
 }
 
 func reverse(s string) string {
