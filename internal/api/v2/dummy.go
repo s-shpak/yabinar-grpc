@@ -10,6 +10,7 @@ import (
 
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 type Server struct {
@@ -28,16 +29,18 @@ func (srv *Server) SayHello(ctx context.Context, req *pbModel.HelloRequest) (*pb
 	}
 	return &pbModel.HelloResponse{
 		Msg: &pbModel.HelloMessage{
-			Msg: respMsg,
+			Msg: &wrapperspb.StringValue{
+				Value: respMsg,
+			},
 		},
 	}, nil
 }
 
 func transformMessage(msg *pbModel.HelloMessage, tfs []*pbModel.HelloTransformation) string {
-	if msg == nil {
+	if msg == nil || msg.Msg == nil {
 		return ""
 	}
-	innerMsg := msg.Msg
+	innerMsg := msg.Msg.Value
 	for _, tf := range tfs {
 		switch tf.Type {
 		case pbModel.HelloTransformationType_HELLO_TRANSFOMRATION_TYPE_TO_UPPER:
@@ -60,9 +63,9 @@ func reverse(s string) string {
 
 func (srv *Server) GetSomethingFromDB(ctx context.Context, req *pbModel.GetSomethingFromDBRequest) (*pbModel.GetSomethingFromDBResponse, error) {
 	var ct *pbModel.ContinuationTokenInternals
-	if req.Ct != nil {
+	if req.Ct != nil && req.Ct.Token != nil {
 		m := &pbModel.ContinuationTokenInternals{}
-		proto.Unmarshal(req.Ct.Token, m)
+		proto.Unmarshal(req.Ct.Token.Value, m)
 		ct = m
 	}
 
@@ -78,7 +81,7 @@ func (srv *Server) GetSomethingFromDB(ctx context.Context, req *pbModel.GetSomet
 	}
 	return &pbModel.GetSomethingFromDBResponse{
 		Ct: &pbModel.ContinuationToken{
-			Token: ctMarshalled,
+			Token: wrapperspb.Bytes(ctMarshalled),
 		},
 	}, nil
 }

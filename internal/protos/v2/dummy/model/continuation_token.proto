@@ -5,9 +5,10 @@ option go_package = "webinar-service/internal/protos/v2/dummy/model";
 package practicum.go.grpc_webinar.v2.dummy.model;
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 message ContinuationToken {
-    bytes token = 1;
+    google.protobuf.BytesValue token = 1;
 }
 
 message ContinuationTokenInternals {
