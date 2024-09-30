@@ -9,8 +9,14 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/encoding/gzip"
+	"google.golang.org/grpc/resolver"
 
 	pb "webinar-service/internal/protos/v1/server_old"
+)
+
+const (
+	dummyScheme      = "dummy"
+	dummyServiceName = "dummy.service"
 )
 
 func main() {
@@ -67,9 +73,8 @@ func (dc *DummyClient) Close() {
 func initClient() (*DummyClient, error) {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		// grpc.WithDefaultCallOptions(grpc.UseCompressor(gzip.Name)),
 	}
-	conn, err := grpc.NewClient("localhost:8081", opts...)
+	conn, err := grpc.NewClient(fmt.Sprintf("%s:///%s", dummyScheme, dummyServiceName), opts...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create a new client: %w", err)
 	}
@@ -80,4 +85,41 @@ func initClient() (*DummyClient, error) {
 		conn:        conn,
 		DummyClient: client,
 	}, err
+}
+
+type dummyResolverBuilder struct{}
+
+func (*dummyResolverBuilder) Build(target resolver.Target, cc resolver.ClientConn, _ resolver.BuildOptions) (resolver.Resolver, error) {
+	r := &dummyResolver{
+		target: target,
+		cc:     cc,
+		addrsStore: map[string][]string{
+			dummyServiceName: {"localhost:8081"},
+		},
+	}
+	r.start()
+	return r, nil
+}
+
+func (*dummyResolverBuilder) Scheme() string { return dummyScheme }
+
+type dummyResolver struct {
+	target     resolver.Target
+	cc         resolver.ClientConn
+	addrsStore map[string][]string
+}
+
+func (r *dummyResolver) start() {
+	addrStrs := r.addrsStore[r.target.Endpoint()]
+	addrs := make([]resolver.Address, len(addrStrs))
+	for i, s := range addrStrs {
+		addrs[i] = resolver.Address{Addr: s}
+	}
+	r.cc.UpdateState(resolver.State{Addresses: addrs})
+}
+func (*dummyResolver) ResolveNow(resolver.ResolveNowOptions) {}
+func (*dummyResolver) Close()                                {}
+
+func init() {
+	resolver.Register(&dummyResolverBuilder{})
 }
