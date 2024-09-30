@@ -19,6 +19,8 @@ const (
 	dummyServiceName = "dummy.service"
 )
 
+var addrs = []string{"localhost:8081", "locahost:8082"}
+
 func main() {
 	if err := run(); err != nil {
 		log.Fatal(err)
@@ -49,15 +51,17 @@ func SayHello(ctx context.Context) error {
 		return fmt.Errorf("failed to initialize a client: %w", err)
 	}
 
-	resp, err := client.SayHello(ctx, &pb.HelloRequest{
-		Msg:      []string{"Hello", "world!"},
-		ClientID: []int64{42},
-	}, grpc.UseCompressor(gzip.Name))
-	if err != nil {
-		return fmt.Errorf("failed to send a message to the server: %v", err)
+	for range 3 {
+		resp, err := client.SayHello(ctx, &pb.HelloRequest{
+			Msg:      []string{"Hello", "world!"},
+			ClientID: []int64{42},
+		}, grpc.UseCompressor(gzip.Name))
+		if err != nil {
+			return fmt.Errorf("failed to send a message to the server: %v", err)
+		}
+		log.Printf("response: \"%v\"", resp.Msg)
 	}
 
-	log.Printf("response: \"%v\"", resp.Msg)
 	return nil
 }
 
@@ -73,6 +77,7 @@ func (dc *DummyClient) Close() {
 func initClient() (*DummyClient, error) {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		//grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
 	}
 	conn, err := grpc.NewClient(fmt.Sprintf("%s:///%s", dummyScheme, dummyServiceName), opts...)
 	if err != nil {
@@ -94,7 +99,7 @@ func (*dummyResolverBuilder) Build(target resolver.Target, cc resolver.ClientCon
 		target: target,
 		cc:     cc,
 		addrsStore: map[string][]string{
-			dummyServiceName: {"localhost:8081"},
+			dummyServiceName: addrs,
 		},
 	}
 	r.start()
@@ -115,7 +120,10 @@ func (r *dummyResolver) start() {
 	for i, s := range addrStrs {
 		addrs[i] = resolver.Address{Addr: s}
 	}
-	r.cc.UpdateState(resolver.State{Addresses: addrs})
+	r.cc.UpdateState(resolver.State{
+		Addresses:     addrs,
+		ServiceConfig: r.cc.ParseServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
+	})
 }
 func (*dummyResolver) ResolveNow(resolver.ResolveNowOptions) {}
 func (*dummyResolver) Close()                                {}

@@ -82,6 +82,20 @@ GRPC_GO_LOG_SEVERITY_LEVEL=info GRPC_GO_LOG_VERBOSITY_LEVEL=2 ./cmd/server/serve
 
 См. что такое `Continuation tokens`, например, здесь: https://phauer.com/2018/web-api-pagination-timestamp-id-continuation-token/
 
+## Load balancing
+
+Разберем пример LB, а затем LB с RoundRobin. Почему при использовании RR все работает как надо ?
+
+Посмотрим лог:
+
+```bash
+GRPC_GO_LOG_SEVERITY_LEVEL=info GRPC_GO_LOG_VERBOSITY_LEVEL=10  ./cmd/client/client hello
+```
+
+## Interceptors
+
+Вы сможете найти некоторые полезные интерсепторы здесь: https://github.com/grpc-ecosystem/go-grpc-middleware
+
 
 ## Protobuf
 
