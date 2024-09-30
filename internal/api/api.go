@@ -10,6 +10,7 @@ import (
 	pbV2Dummy "webinar-service/internal/protos/v2/dummy"
 
 	"google.golang.org/grpc"
+	_ "google.golang.org/grpc/encoding/gzip"
 	"google.golang.org/grpc/reflection"
 )
 
