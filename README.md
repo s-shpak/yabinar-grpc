@@ -34,10 +34,54 @@ protoc \
 
 См. рекомендации здесь: https://protobuf.dev/programming-guides/dos-donts/
 
-1. Нельзя пререиспользовать номера удаленных полей. Нужно объявлять удаленные поля как `reserved`.
-2. Нельзя переиспользовать значения Enum'ов.
+См. ветку `best-practices-demo` для примеров.
 
 Protobuf не дает гарантий по стабильности алгоритма сериализации сообщений при изменении версии.
+
+## V2
+
+Зарефакторим dummy-сервис. Новые proto-определения находятся в `internal/protos/v2/dummy`.
+
+Обратите внимание на изменения вызова `protoc`.
+
+Теперь определение сервиса `dummy` состоит из нескольких proto-файлов, передать определения в Postman как раньше не получится.
+
+## gRPC reflection
+
+См. `internal/api/api.go` для примера подключения серверной рефлексии.
+
+Postman позволяет получить информацию по gRPC-эндпоинтам при помощи рефлекии. Но сейчас этот функционал сломан. Что же произошло ?
+
+Используетс `grpcurl` для "отладки":
+
+```bash
+# получим информацию по всем сервисам
+grpcurl -plaintext localhost:8081 list
+
+# посмотрим на интересующий нас сервис
+grpcurl -plaintext localhost:8081 describe practicum.go.grpc_webinar.v2.dummy.Dummy
+```
+
+В чем дело ?
+
+Здесь несколько устаревшее, но полезное обсуждение: https://github.com/fullstorydev/grpcurl/issues/22
+
+Исправим проблему и убедимся, что теперь Postman может использовать рефлексию.
+
+Также для дебаггинга могут пригодиться переменные окружения `GRPC_GO_LOG_SEVERITY_LEVEL` и `GRPC_GO_LOG_VERBOSITY_LEVEL`:
+
+```bash
+GRPC_GO_LOG_SEVERITY_LEVEL=info GRPC_GO_LOG_VERBOSITY_LEVEL=2 ./cmd/server/server
+```
+
+## Api best practices
+
+См. рекомендации здесь: https://protobuf.dev/programming-guides/api/
+
+### Opaque fields
+
+См. что такое `Continuation tokens`, например, здесь: https://phauer.com/2018/web-api-pagination-timestamp-id-continuation-token/
+
 
 ## Protobuf
 

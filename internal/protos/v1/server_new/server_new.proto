@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "webinar-service/internal/protos/server_new";
+
+package webinar.protobuf;
+
+service Dummy {
+    rpc SayHello (HelloRequest) returns (HelloResponse) {}
+}
+  
+
+message HelloRequest {
+    reserved 1;
+    string msg = 2;
+    string locale = 3;
+    optional HelloTransformation transformation = 4;
+    int64 clientID = 5;
+}
+
+message HelloResponse {
+    string msg = 1;
+}
+
+enum HelloTransformation {
+    HELLO_TRANSFORMATION_UNSPECIFIED = 0;
+    HELLO_TRANSFOMRATION_TO_UPPER = 1;
+    HELLO_TRANSFOMRATION_REVERSE = 2;
+}

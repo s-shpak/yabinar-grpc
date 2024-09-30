@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "webinar-service/internal/protos/v2/dummy/model";
+
+package practicum.go.grpc_webinar.v2.dummy.model;
+
+import "model/client_id.proto";
+import "model/hello_message.proto";
+import "model/hello_transformation.proto";
+import "model/locale.proto";
+
+message HelloRequest {
+    reserved 1;
+    HelloMessage msg = 2;
+    Locale locale = 3;
+    repeated HelloTransformation transformations = 4;
+    ClientID client_id = 5;
+}

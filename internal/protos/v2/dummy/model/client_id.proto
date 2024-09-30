@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option go_package = "webinar-service/internal/protos/v2/dummy/model";
+
+package practicum.go.grpc_webinar.v2.dummy.model;
+
+import "google/protobuf/wrappers.proto";
+
+message ClientID {
+    google.protobuf.StringValue id = 1;
+}
