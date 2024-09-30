@@ -4,8 +4,12 @@ option go_package = "webinar-service/internal/protos/v2/dummy/model";
 
 package practicum.go.grpc_webinar.v2.dummy.model;
 
-enum HelloTransformation {
-    HELLO_TRANSFORMATION_UNSPECIFIED = 0;
-    HELLO_TRANSFOMRATION_TO_UPPER = 1;
-    HELLO_TRANSFOMRATION_REVERSE = 2;
+message HelloTransformation {
+    HelloTransformationType type = 1;
+}
+
+enum HelloTransformationType {
+    HELLO_TRANSFORMATION_TYPE_UNSPECIFIED = 0;
+    HELLO_TRANSFOMRATION_TYPE_TO_UPPER = 1;
+    HELLO_TRANSFOMRATION_TYPE_REVERSE = 2;
 }

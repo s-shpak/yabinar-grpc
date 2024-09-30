@@ -18,7 +18,7 @@ func NewServer() *Server {
 }
 
 func (srv *Server) SayHello(ctx context.Context, req *pbModel.HelloRequest) (*pbModel.HelloResponse, error) {
-	msg := transformMessage(req.Msg, req.GetTransformation())
+	msg := transformMessage(req.Msg, req.GetTransformations())
 	respMsg := fmt.Sprintf("got: \"%s\"", msg)
 	if req.ClientId != nil {
 		respMsg += fmt.Sprintf(", client ID: %d", req.ClientId.Id)
@@ -30,17 +30,20 @@ func (srv *Server) SayHello(ctx context.Context, req *pbModel.HelloRequest) (*pb
 	}, nil
 }
 
-func transformMessage(msg *pbModel.HelloMessage, tf pbModel.HelloTransformation) string {
+func transformMessage(msg *pbModel.HelloMessage, tfs []*pbModel.HelloTransformation) string {
 	if msg == nil {
 		return ""
 	}
 	innerMsg := msg.Msg
-	switch tf {
-	case pbModel.HelloTransformation_HELLO_TRANSFOMRATION_TO_UPPER:
-		return strings.ToUpper(innerMsg)
-	case pbModel.HelloTransformation_HELLO_TRANSFOMRATION_REVERSE:
-		return reverse(innerMsg)
+	for _, tf := range tfs {
+		switch tf.Type {
+		case pbModel.HelloTransformationType_HELLO_TRANSFOMRATION_TYPE_TO_UPPER:
+			innerMsg = strings.ToUpper(innerMsg)
+		case pbModel.HelloTransformationType_HELLO_TRANSFOMRATION_TYPE_REVERSE:
+			innerMsg = reverse(innerMsg)
+		}
 	}
+
 	return innerMsg
 }
 

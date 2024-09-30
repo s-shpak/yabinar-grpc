@@ -13,6 +13,6 @@ message HelloRequest {
     reserved 1;
     HelloMessage msg = 2;
     Locale locale = 3;
-    optional HelloTransformation transformation = 4;
+    repeated HelloTransformation transformations = 4;
     ClientID client_id = 5;
 }
