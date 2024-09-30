@@ -1,7 +1,12 @@
 package main
 
-import "webinar-service/internal/api"
+import (
+	"log"
+	"webinar-service/internal/api"
+)
 
 func main() {
-	api.Serve()
+	if err := api.Serve(); err != nil {
+		log.Fatal(err)
+	}
 }

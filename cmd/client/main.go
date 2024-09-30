@@ -8,6 +8,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/encoding/gzip"
 
 	pb "webinar-service/internal/protos/v1/server_old"
 )
@@ -45,7 +46,7 @@ func SayHello(ctx context.Context) error {
 	resp, err := client.SayHello(ctx, &pb.HelloRequest{
 		Msg:      []string{"Hello", "world!"},
 		ClientID: []int64{42},
-	})
+	}, grpc.UseCompressor(gzip.Name))
 	if err != nil {
 		return fmt.Errorf("failed to send a message to the server: %v", err)
 	}
@@ -66,6 +67,7 @@ func (dc *DummyClient) Close() {
 func initClient() (*DummyClient, error) {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		// grpc.WithDefaultCallOptions(grpc.UseCompressor(gzip.Name)),
 	}
 	conn, err := grpc.NewClient("localhost:8081", opts...)
 	if err != nil {
