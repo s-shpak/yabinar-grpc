@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net"
 	server "webinar-service/internal/api/v1"
-	dummy "webinar-service/internal/api/v2"
+	dummyV3 "webinar-service/internal/api/v3"
 
 	pb "webinar-service/internal/protos/v1/server_new"
-	pbV2Dummy "webinar-service/internal/protos/v2/dummy"
+	pbV3Dummy "webinar-service/internal/protos/v3/dummy"
 
 	"google.golang.org/grpc"
 	_ "google.golang.org/grpc/encoding/gzip"
@@ -21,7 +21,8 @@ func Serve() error {
 	}
 	grpcServer := grpc.NewServer()
 	pb.RegisterDummyServer(grpcServer, server.NewServer())
-	pbV2Dummy.RegisterDummyServer(grpcServer, dummy.NewServer())
+	//pbV2Dummy.RegisterDummyServer(grpcServer, dummy.NewServer())
+	pbV3Dummy.RegisterDummyServer(grpcServer, dummyV3.NewServer())
 
 	reflection.Register(grpcServer)
 

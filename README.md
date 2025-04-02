@@ -106,3 +106,27 @@ GRPC_GO_LOG_SEVERITY_LEVEL=info GRPC_GO_LOG_VERBOSITY_LEVEL=10  ./cmd/client/cli
 ```bash
 go install github.com/protocolbuffers/protoscope/cmd/protoscope...@latest
 ```
+
+## Open2Opaque
+
+См. https://protobuf.dev/reference/go/opaque-migration/
+
+Выполним в папке `internal/protos/v3`:
+
+```bash
+open2opaque setapi -api HYBRID $(find . -name "*.proto")
+```
+
+Перейдем в `internal/api/v3` и выполним:
+
+```bash
+open2opaque rewrite -levels=red ./...
+```
+
+Завершим миграцию. Перейдем в `internal/protos/v3` и выполним:
+
+```bash
+open2opaque setapi -api OPAQUE $(find . -name "*.proto")
+```
+
+Сгенерируем сервер и клиент и обратим внимание на разницу в коде.

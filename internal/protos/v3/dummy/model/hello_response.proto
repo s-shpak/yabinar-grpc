@@ -1,0 +1,11 @@
+edition = "2023";
+
+option go_package = "webinar-service/internal/protos/v3/dummy/model";
+
+package practicum.go.grpc_webinar.v3.dummy.model;
+
+import "model/hello_message.proto";
+
+message HelloResponse {
+    HelloMessage msg = 1;
+}

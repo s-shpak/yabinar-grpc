@@ -1,5 +1,5 @@
 .PHONY: gen-proto
-gen-proto: gen-v1 gen-v2
+gen-proto: gen-v1 gen-v2 gen-v3
 
 .PHONY: gen-v1
 gen-v1:
@@ -20,12 +20,14 @@ gen-v1:
 .PHONY: gen-v2
 gen-v2:
 	protoc \
+		-I/usr/local/include \
 		--proto_path=internal/protos/v2/dummy \
 		--go_out=internal/protos/v2/dummy \
 		--go_opt=paths=source_relative \
 		internal/protos/v2/dummy/model/*.proto
 
 	protoc \
+		-I/usr/local/include \
 		--proto_path=internal/protos/v2/dummy \
 		--proto_path=internal/protos/v2/dummy/model \
 		--go_out=internal/protos/v2/dummy \
@@ -33,6 +35,25 @@ gen-v2:
 		--go-grpc_out=internal/protos/v2/dummy \
 		--go-grpc_opt=paths=source_relative \
 		internal/protos/v2/dummy/*.proto
+
+.PHONY: gen-v3
+gen-v3:
+	protoc \
+		-I/usr/local/include \
+		--proto_path=internal/protos/v3/dummy \
+		--go_out=internal/protos/v3/dummy \
+		--go_opt=paths=source_relative \
+		internal/protos/v3/dummy/model/*.proto
+
+	protoc \
+		-I/usr/local/include \
+		--proto_path=internal/protos/v3/dummy \
+		--proto_path=internal/protos/v3/dummy/model \
+		--go_out=internal/protos/v3/dummy \
+		--go_opt=paths=source_relative \
+		--go-grpc_out=internal/protos/v3/dummy \
+		--go-grpc_opt=paths=source_relative \
+		internal/protos/v3/dummy/*.proto
 
 .PHONY: build
 build: build-server-client

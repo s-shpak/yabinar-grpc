@@ -1,0 +1,9 @@
+edition = "2023";
+
+option go_package = "webinar-service/internal/protos/v3/dummy/model";
+
+package practicum.go.grpc_webinar.v3.dummy.model;
+
+message Locale {
+    string locale = 1;
+}
